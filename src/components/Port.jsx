@@ -77,16 +77,26 @@ export default function Port() {
       });
     }
     // Form Submission
-    function setupForm() {
+    const setupForm = ()=> {
       const form = document.querySelector('.contact-form form');
       if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
           e.preventDefault();
           const btn = form.querySelector('.submit-btn');
           const originalText = btn.textContent;
           btn.textContent = 'Sending...';
           btn.style.opacity = '0.7';
-          setTimeout(() => {
+
+          // Collect form data
+          const formData = {
+            name: form.querySelector('input[placeholder="Your Name"]').value,
+            email: form.querySelector('input[placeholder="Your Email"]').value,
+            subject: form.querySelector('input[placeholder="Subject"]').value,
+            message: form.querySelector('textarea[placeholder="Your Message"]').value
+          };
+
+          try {
+            await axios.post('http://localhost:3000/api/contact/', formData);
             btn.textContent = 'Message Sent!';
             btn.style.background = 'linear-gradient(45deg, #9370DB, #8A2BE2)';
             setTimeout(() => {
@@ -95,7 +105,15 @@ export default function Port() {
               btn.style.background = 'linear-gradient(45deg, #8A2BE2, #9370DB)';
               form.reset();
             }, 2000);
-          }, 1500);
+          } catch {
+            btn.textContent = 'Error! Try Again';
+            btn.style.background = 'red';
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.style.opacity = '1';
+              btn.style.background = 'linear-gradient(45deg, #8A2BE2, #9370DB)';
+            }, 2000);
+          }
         });
       }
     }

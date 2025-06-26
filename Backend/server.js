@@ -1,8 +1,10 @@
-import express from "express"
-import dotenv from "dotenv"
-import connectDB from './config/db'
-import router from './router/router'
-import cors from "cors"
+/* eslint-env node */
+/* global require, process */
+const express = require('express');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+const router = require('./router/router');
+const cors = require('cors');
 
 // Load environment variables
 dotenv.config();
